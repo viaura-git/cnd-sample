@@ -1,0 +1,15 @@
+# 06.cnd-authorization-policy.yaml (새 파일)
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: member-authz-policy
+  namespace: cnd-dev
+spec:
+  selector:
+    matchLabels:
+      gateway.networking.k8s.io/gateway-name: cnd-ingress-gateway # member-service 파드에 정책 적용
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            requestPrincipals: ["*"] # JWT가 유효하면 모두 허용

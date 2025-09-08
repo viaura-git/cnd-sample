@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cnd-lea-lp
+  namespace: cnd-dev
+  labels:
+    app: cnd-lea-lp
+    app.kubernetes.io/name: member-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cnd-lea-lp
+  template:
+    metadata:
+      labels:
+        app: cnd-lea-lp
+        app.kubernetes.io/name: member-service
+    spec:
+      containers:
+        - name: cnd-lea-lp
+          image: fusionsoft/cnd-lea-lp:0.0.1-SNAPSHOT
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: k8s
+            - name: JWT_ISSUER
+              valueFrom:
+                configMapKeyRef:
+                  name: jwt-config
+                  key: jwt.issuer
+            - name: JWT_ACCESS_TOKEN_VALIDITY
+              valueFrom:
+                configMapKeyRef:
+                  name: jwt-config
+                  key: jwt.access-token-validity-seconds
+            - name: JWT_REFRESH_TOKEN_VALIDITY
+              valueFrom:
+                configMapKeyRef:
+                  name: jwt-config
+                  key: jwt.refresh-token-validity-seconds
+          volumeMounts:
+            - name: jwt-keys
+              mountPath: /keys
+              readOnly: true
+      volumes:
+        - name: jwt-keys
+          secret:
+            secretName: jwt-keys
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: member-service
+  namespace: cnd-dev
+  labels:
+    app: member-service
+    app.kubernetes.io/name: member-service
+spec:
+  selector:
+    app: cnd-lea-lp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

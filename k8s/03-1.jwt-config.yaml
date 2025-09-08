@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jwt-config
+  namespace: cnd-dev
+data:
+  jwt.issuer: "cnd-dev"
+  jwt.access-token-validity-seconds: "1209600"   # 14일
+  jwt.refresh-token-validity-seconds: "2592000" # 30일

@@ -1,0 +1,20 @@
+apiVersion: security.istio.io/v1beta1
+kind: RequestAuthentication
+metadata:
+  name: jwt-auth
+  namespace: cnd-dev
+spec:
+  selector:
+    matchLabels:
+      gateway.networking.k8s.io/gateway-name: cnd-ingress-gateway   # 네임스페이스 전체 적용 대신 app label로 좁히는 걸 권장
+  jwtRules:
+    - issuer: "cnd-dev"   # JwtProvider에서 설정한 iss 값과 동일해야 함
+      jwksUri: "http://member-service.cnd-dev.svc.cluster.local/.well-known/jwks.json"
+      fromHeaders:
+        - name: Authorization
+          prefix: "Bearer "
+      outputClaimToHeaders:
+        - claim: sub
+          header: x-cnd-username
+        - claim: roles
+          header: x-cnd-roles
