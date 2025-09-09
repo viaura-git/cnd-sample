@@ -4,14 +4,19 @@ metadata:
   name: public-authz-policy
   namespace: cnd-dev
 spec:
-  selector:
-    matchLabels:
-      app: cnd-lea-lp
+  selector: {}
+#    matchLabels:
+#      app: cnd-lea-lp
   action: ALLOW
   rules:
     - to:
         - operation:
-            paths: ["/api/v1/members/login", "/api/v1/members/register"]
+            paths: [
+              "/api/v1/members/login",
+              "/api/v1/members/register",
+              "/api/v1/lea/login",
+              "/api/v1/lea/register"
+            ]
 
 ---
 
@@ -22,10 +27,10 @@ metadata:
   name: require-jwt-policy
   namespace: cnd-dev
 spec:
-  selector:
-    matchLabels:
-      app: cnd-lea-lp
-      #gateway.networking.k8s.io/gateway-name: cnd-ingress-gateway # member-service 파드에 정책 적용
+#  selector:
+#    matchLabels:
+#      app: cnd-lea-lp
+#      gateway.networking.k8s.io/gateway-name: cnd-ingress-gateway # member-service 파드에 정책 적용
   action: ALLOW
   rules:
     - from:

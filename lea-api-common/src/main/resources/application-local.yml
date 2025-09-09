@@ -38,5 +38,9 @@ logging:
     net:
       sf:
         log4jdbc: WARN
-server:
-  port: 8080
+
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml   # XML 매퍼 경로
+  type-aliases-package: com.fusionsoft.cnd.lea.api.common.domain.entity      # DTO/Entity 패키지
+  configuration:
+    map-underscore-to-camel-case: true          # 컬럼명 → 카멜케이스 자동 매핑

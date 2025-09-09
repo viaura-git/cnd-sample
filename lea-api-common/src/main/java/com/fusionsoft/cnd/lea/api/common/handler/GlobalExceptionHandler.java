@@ -1,10 +1,10 @@
-package com.fusionsoft.cnd.lea.lp.handler;
+package com.fusionsoft.cnd.lea.api.common.handler;
 
-import com.fusionsoft.cnd.lea.lp.domain.dto.ApiResponse;
+import com.fusionsoft.cnd.lea.api.common.domain.dto.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MissingRequestHeaderException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -27,19 +27,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 
-    @ExceptionHandler(MissingRequestHeaderException.class)
-    public ResponseEntity<ApiResponse<Void>> handleException(MissingRequestHeaderException e) {
-        // 예외 클래스 이름
+    // 사용자 없을 때
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleUserNotFound(UsernameNotFoundException e) {
         log.error("Exception caught: {} - {}", e.getClass().getSimpleName(), e.getMessage(), e);
-        ApiResponse<Void> response = ApiResponse.error("MISSING_REQUEST_HEADER", "토큰인증이 되지 않았습니다");
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        ApiResponse<Void> response = ApiResponse.error("USER_NOT_FOUND", e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
-
-     // 사용자 없을 때
-//    @ExceptionHandler(UsernameNotFoundException.class)
-//    public ResponseEntity<ApiResponse<Void>> handleUserNotFound(UsernameNotFoundException e) {
-//        log.error("Exception caught: {} - {}", e.getClass().getSimpleName(), e.getMessage(), e);
-//        ApiResponse<Void> response = ApiResponse.error("USER_NOT_FOUND", e.getMessage());
-//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-//    }
 }

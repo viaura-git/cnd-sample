@@ -1,8 +1,8 @@
-package com.fusionsoft.cnd.lea.lp.controller;
+package com.fusionsoft.cnd.lea.api.common.controller;
 
-import com.fusionsoft.cnd.lea.lp.domain.dto.*;
-import com.fusionsoft.cnd.lea.lp.domain.type.AuthType;
-import com.fusionsoft.cnd.lea.lp.service.AuthService;
+import com.fusionsoft.cnd.lea.api.common.domain.dto.*;
+import com.fusionsoft.cnd.lea.api.common.domain.type.AuthType;
+import com.fusionsoft.cnd.lea.api.common.security.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,12 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-
 //HomeController 는 logout만 token 체크를 한다
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/members")
+@RequestMapping("/api/v1/lea")
 @RequiredArgsConstructor
 public class HomeController {
 
@@ -83,8 +81,8 @@ public class HomeController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest req){
-        var user = authService.register(req);
-        return ResponseEntity.ok(Map.of("userID", user.getUserId(), "fullName", user.getUserName()));
+        var insertCount = authService.register(req);
+        return ResponseEntity.ok(insertCount +"행 추가");
     }
 
 }

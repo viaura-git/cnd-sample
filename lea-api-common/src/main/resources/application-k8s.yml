@@ -49,6 +49,3 @@ logging:
     net:
       sf:
         log4jdbc: WARN
-
-server:
-  port: 8080

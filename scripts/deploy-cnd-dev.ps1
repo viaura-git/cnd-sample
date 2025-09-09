@@ -27,6 +27,7 @@ Write-Host "==============================="
 Write-Host "🚀 Step 4: Deployments + Services 적용"
 Write-Host "==============================="
 kubectl apply -f k8s/03.deployments-member.yaml
+kubectl apply -f k8s/03.deployments-lea-api-common.yaml
 
 kubectl get gateway -n cnd-dev
 
@@ -55,6 +56,7 @@ Write-Host "==============================="
 Write-Host "🚀 Step 8: Deployments + Services 적용"
 Write-Host "==============================="
 kubectl apply -f k8s/05.cnd-gateway-authentication.yaml
+kubectl apply -f k8s/06.cnd-gateway-authorization-policy.yaml
 
 kubectl rollout restart deployment -n cnd-dev
 

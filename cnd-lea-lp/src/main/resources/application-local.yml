@@ -46,4 +46,4 @@ logging:
       sf:
         log4jdbc: WARN
 server:
-  port: 8081
+  port: 8080

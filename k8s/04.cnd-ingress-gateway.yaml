@@ -30,3 +30,10 @@ spec:
       backendRefs:
         - name: member-service
           port: 80
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api/v1/lea
+      backendRefs:
+        - name: lea-common-service
+          port: 80

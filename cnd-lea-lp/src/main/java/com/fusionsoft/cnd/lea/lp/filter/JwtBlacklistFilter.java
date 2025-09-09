@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Collections;
 
 @Slf4j
 @Component
@@ -28,6 +29,9 @@ public class JwtBlacklistFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+
+        Collections.list(request.getHeaderNames())
+                .forEach(name -> log.debug("Header: {}={}", name, request.getHeader(name)));
 
         String path = request.getRequestURI();
 

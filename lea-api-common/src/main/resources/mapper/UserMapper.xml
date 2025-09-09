@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fusionsoft.cnd.lea.api.common.mapper.UserMapper">
+
+    <insert id="insertMember" parameterType="User">
+        INSERT INTO USERS (user_id, user_name, password, email, phone)
+        VALUES (#{userId}, #{userName}, #{password}, #{email}, #{phone})
+    </insert>
+
+    <select id="findByUserId" resultType="User" parameterType="String">
+        SELECT USERS.UID, USERS.user_id, USERS.user_name, USERS.password, USERS.email,
+               USERS.phone, USERS.enabled, USERS.reg_date, USERS.upd_date, USER_ROLES.role_name
+          FROM USERS, USER_ROLES
+         WHERE USERS.UID = USER_ROLES.UID
+           AND user_id = #{userId}
+    </select>
+
+</mapper>

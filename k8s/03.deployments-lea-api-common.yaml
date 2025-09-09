@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lea-api-common
+  namespace: cnd-dev
+  labels:
+    app: lea-api-common
+    app.kubernetes.io/name: lea-common-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lea-api-common
+  template:
+    metadata:
+      labels:
+        app: lea-api-common
+        app.kubernetes.io/name: lea-common-service
+    spec:
+      containers:
+        - name: lea-api-common
+          image: fusionsoft/lea-api-common:0.0.1-SNAPSHOT
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: k8s
+            - name: JWT_ISSUER
+              valueFrom:
+                configMapKeyRef:
+                  name: jwt-config
+                  key: jwt.issuer
+            - name: JWT_ACCESS_TOKEN_VALIDITY
+              valueFrom:
+                configMapKeyRef:
+                  name: jwt-config
+                  key: jwt.access-token-validity-seconds
+            - name: JWT_REFRESH_TOKEN_VALIDITY
+              valueFrom:
+                configMapKeyRef:
+                  name: jwt-config
+                  key: jwt.refresh-token-validity-seconds
+          volumeMounts:
+            - name: jwt-keys
+              mountPath: /keys
+              readOnly: true
+      volumes:
+        - name: jwt-keys
+          secret:
+            secretName: jwt-keys
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lea-common-service
+  namespace: cnd-dev
+  labels:
+    app: lea-common-service
+    app.kubernetes.io/name: lea-common-service
+spec:
+  selector:
+    app: lea-api-common
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

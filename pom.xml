@@ -19,6 +19,7 @@
     </properties>
     <modules>
         <module>cnd-lea-lp</module>
+        <module>lea-api-common</module>
     </modules>
 
     <build>
