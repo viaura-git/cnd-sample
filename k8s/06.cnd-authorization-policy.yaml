@@ -1,15 +1,36 @@
-# 06.cnd-authorization-policy.yaml (새 파일)
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
-  name: member-authz-policy
+  name: public-authz-policy
   namespace: cnd-dev
 spec:
   selector:
     matchLabels:
-      gateway.networking.k8s.io/gateway-name: cnd-ingress-gateway # member-service 파드에 정책 적용
+      app: cnd-lea-lp
+  action: ALLOW
+  rules:
+    - to:
+        - operation:
+            paths: ["/api/v1/members/login", "/api/v1/members/register"]
+
+---
+
+# 06.cnd-authorization-policy.yaml (새 파일)
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: require-jwt-policy
+  namespace: cnd-dev
+spec:
+  selector:
+    matchLabels:
+      app: cnd-lea-lp
+      #gateway.networking.k8s.io/gateway-name: cnd-ingress-gateway # member-service 파드에 정책 적용
   action: ALLOW
   rules:
     - from:
         - source:
-            requestPrincipals: ["*"] # JWT가 유효하면 모두 허용
+            requestPrincipals: ["cnd-dev"] # cnd-dev에서 발급한 jwt면 허용
+      to:
+        - operation:
+            paths: ["/api/v1/*"]
