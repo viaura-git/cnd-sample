@@ -4,12 +4,14 @@ metadata:
   name: jwt-auth
   namespace: cnd-dev
 spec:
-  selector:
-    matchLabels:
-      gateway.networking.k8s.io/gateway-name: cnd-ingress-gateway   # 네임스페이스 전체 적용 대신 app label로 좁히는 걸 권장
+#  selector:
+#    matchLabels:
+#      app: cnd-lea-lp
+      #gateway.networking.k8s.io/gateway-name: cnd-ingress-gateway   # 네임스페이스 전체 적용 대신 app label로 좁히는 걸 권장
   jwtRules:
     - issuer: "cnd-dev"   # JwtProvider에서 설정한 iss 값과 동일해야 함
-      jwksUri: "http://member-service.cnd-dev.svc.cluster.local/.well-known/jwks.json"
+      jwksUri: "http://member-service.cnd-dev.svc.cluster.local:80/.well-known/jwks.json"
+      #jwksUri: "http://host.docker.internal:8081/.well-known/jwks.json"
       fromHeaders:
         - name: Authorization
           prefix: "Bearer "
