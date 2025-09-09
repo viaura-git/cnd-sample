@@ -3,7 +3,7 @@ package com.fusionsoft.cnd.lea.lp.domain.dto;
 import org.slf4j.MDC;
 
 public record ApiResponse<T>(
-        boolean success,
+        boolean result,
         String code,
         String message,
         T data,
